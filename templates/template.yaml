@@ -1,0 +1,65 @@
+---
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  template: hello
+metadata:
+  annotations:
+    description: This is an example of application template in OpenShift 4
+    iconClass: default
+    tags: hello, world
+  name: httpd-template
+objects:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: hello-world-service
+  spec:
+    ports:
+    - name: http
+      nodePort: 0
+      port: ${{SERVICE_PORT}}
+      protocol: TCP
+      targetPort: ${{INTERNAL_PORT}}
+    selector:
+      name: hello
+- apiVersion: v1
+  kind: Route
+  metadata:
+    labels:
+      name: hello
+    name: hello-world-route
+  spec:
+    host: ${APPLICATION_DOMAIN}
+    to:
+      kind: Service
+      name: hello-world-service
+
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    name: welcome-pod
+  spec:
+     containers:
+     - image: docker.io/library/httpd:latest
+       imagePullPolicy: IfNotPresent
+       name: hello
+       ports:
+       - containerPort: ${{INTERNAL_PORT}}
+         name: http
+         protocol: TCP
+
+parameters:
+- description: The exposed hostname that will route to the Hello World service
+  name: APPLICATION_DOMAIN
+  value: "hello-world.cloud.openshift.b-cloud.it"
+  required: true
+- description: The internal port used by the pods
+  name: INTERNAL_PORT
+  value: "80"
+  required: true
+- description: The port exposed by the service
+  name: SERVICE_PORT
+  value: "80"
+  required: true
+
