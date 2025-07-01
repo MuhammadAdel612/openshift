@@ -1,4 +1,4 @@
-##Templates
+# Templates
 
 In OpenShift, a template describes a set of objects that can be parameterized and processed. A template can be processed to create anything we have permission to create within a given project, for example: pod, services, routes and deployment configurations. A template may also define a set of labels to apply to every object defined in the template.
 
@@ -8,46 +8,48 @@ We can see many of the items already we know: a service, a route and a pod or re
 
 In OpenShift, templates live in the openshift project. List existing templates
 
-#[root@master ~]# oc login -u system:admin
-#[root@master ~]# oc project openshift
+## [root@master ~]# oc login -u system:admin
+## [root@master ~]# oc project openshift
 
-#[root@master ~]# oc get template 
+## [root@master ~]# oc get template 
 NAME DESCRIPTION PARAMETERS OBJECTS amq62-basic Application template for JBoss A-MQ... 10 (3 blank) 5 ...
 
-##Add the template we defined before
+## Add the template we defined before
 
-#[root@master ~]# oc create -f template.yaml 
+## [root@master ~]# oc create -f template.yaml 
 template "hello-template" created
 
-#[root@master ~]# oc get template hello-template NAME DESCRIPTION PARAMETERS OBJECTS hello-world-template This is an example of app... 3 (all set) 3
+## [root@master ~]# oc get template hello-template NAME DESCRIPTION PARAMETERS OBJECTS hello-world-template This is an example of app... 3 (all set) 3
 
 List the parameters that can be override
 
-#[root@master ~]# oc process --parameters hello-world-template NAME DESCRIPTION GENERATOR VALUE APPLICATION_DOMAIN The exposed hostname that .. hello-world.cloud.openshift.com INTERNAL_PORT The internal port used by the pods 8080 SERVICE_PORT The port exposed by the service 9000
+## [root@master ~]# oc process --parameters hello-world-template 
 
-##Modify an existing template
+NAME DESCRIPTION GENERATOR VALUE APPLICATION_DOMAIN The exposed hostname that .. hello-world.cloud.openshift.com INTERNAL_PORT The internal port used by the pods 8080 SERVICE_PORT The port exposed by the service 9000
 
-#[root@master ~]# oc edit template hello-world-template
+# Modify an existing template
 
-##Create a Template from Existing Objects
+## [root@master ~]# oc edit template hello-world-template
+
+# Create a Template from Existing Objects
 
 Rather than writing an entire template from scratch, we can also export existing objects in template form, and then modify the template from there by adding parameters and other customizations.
 
 Export existing objects in the project in a template form:
 
-#[demo@master ~]$ oc create -f pod-hello-world-limited.yaml pod "hello-pod" created
+## [demo@master ~]$ oc create -f pod-hello-world-limited.yaml pod "hello-pod" created
 
-#[demo@master ~]$ oc get all NAME READY STATUS RESTARTS AGE po/hello-pod 1/1 Running 0 18s
+## [demo@master ~]$ oc get all NAME READY STATUS RESTARTS AGE po/hello-pod 1/1 Running 0 18s
 
-#[demo@master ~]$ oc export all --as-template=new-template -o yaml > new-template.yaml
+## [demo@master ~]$ oc export all --as-template=new-template -o yaml > new-template.yaml
 
-##Create an application from a template
+# Create an application from a template
 
 OpenShift users can create an application from a previously stored template or from a template file, by specifying the name of the template as an argument.
 
 Create the Hello World application by the above template
 
-#[demo@master ~]$ oc new-app --template=hello-world-template --> Deploying template "openshift/hello-world-template" to project demo
+## [demo@master ~]$ oc new-app --template=hello-world-template --> Deploying template "openshift/hello-world-template" to project demo
 
  hello-world-template
  ---------
@@ -62,7 +64,7 @@ Create the Hello World application by the above template
 
 When creating an application based on a template, users can set parameter values defined by the template
 
-#[demo@master ~]$ oc new-app --template=hello-world-template -p
+## [demo@master ~]$ oc new-app --template=hello-world-template -p
 APPLICATION_DOMAIN=myapp.cloud.openshift.com
 INTERNAL_PORT=8088
 SERVICE_PORT=5680
