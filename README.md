@@ -1,23 +1,23 @@
 # Templates
 
-** In OpenShift, a template describes a set of objects that can be parameterized and processed. A template can be processed to create anything we have permission to create within a given project, for example: pod, services, routes and deployment configurations. A template may also define a set of labels to apply to every object defined in the template.
+**In OpenShift, a template describes a set of objects that can be parameterized and processed. A template can be processed to create anything we have permission to create within a given project, for example: pod, services, routes and deployment configurations. A template may also define a set of labels to apply to every object defined in the template.
 
 To getting started, here is a template.yaml template file for our Hello World application looks like...
 
 We can see many of the items already we know: a service, a route and a pod or replicaset with related pod definition. We also see the use of parametric values. These parameters are useful when create a new application.
 
-In OpenShift, templates live in the openshift project. List existing templates **
+In OpenShift, templates live in the openshift project. List existing templates**
 
 ### [root@master ~]# oc login -u system:admin
 ### [root@master ~]# oc project openshift
 
 ### [root@master ~]# oc get template 
- ** NAME DESCRIPTION PARAMETERS OBJECTS amq62-basic Application template for JBoss A-MQ... 10 (3 blank) 5 ... **
+ **NAME DESCRIPTION PARAMETERS OBJECTS amq62-basic Application template for JBoss A-MQ... 10 (3 blank) 5 ...**
 
 ### Add the template we defined before
 
 ### [root@master ~]# oc create -f template.yaml 
- ** template "hello-template" created **
+template "hello-template" created
 
 ### [root@master ~]# oc get template hello-template NAME DESCRIPTION PARAMETERS OBJECTS hello-world-template This is an example of app... 3 (all set) 3
 
